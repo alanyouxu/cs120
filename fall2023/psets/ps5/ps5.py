@@ -129,7 +129,36 @@ def bfs_2_coloring(G, precolored_nodes=None):
     
     # TODO: Complete this function by implementing two-coloring using the colors 0 and 1.
     # If there is no valid coloring, reset all the colors to None using G.reset_colors()
-    
+    if G.N == 0:
+        return None
+    else:
+        visited.add(0)
+        cur_color = 0
+        G.colors[0] = cur_color
+        frontier = {0}
+
+    while len(visited) < G.N:
+        cur_color = 1-cur_color
+        last_frontier = frontier
+        frontier = set()
+
+        for u in last_frontier:
+            for v in G.edges[u]:
+                if v not in visited:
+                    frontier.add(v)
+                    visited.add(v)
+                    G.colors[v] = cur_color
+
+        # must jump to next component, add the first unvisited vertex in list
+        if (len(frontier) == 0) and (len(visited) < G.N):
+            i = 1 #start from 1 because we added 0 already
+            while i in visited:
+                i += 1
+            frontier.add(i)
+            
+
+    if G.is_graph_coloring_valid:
+        return G.colors
     G.reset_colors()
     return None
 
