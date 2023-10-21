@@ -173,9 +173,25 @@ def is_independent_set(G, subset):
     for u in subset:
         for v in G.edges[u]:
             if v in subset:
-                return False
+                return False    
 
     return True
+    # vertex_bitset = 0
+
+    # # Set the corresponding bit for each vertex in the subset
+    # for vertex in subset:
+    #     vertex_bitset |= 1 << vertex
+
+    # # Iterate through the vertices in the subset and check if they have no common neighbors
+    # for vertex in subset:
+    #     neighbors_bitset = 0
+    #     for neighbor in G[vertex]:
+    #         neighbors_bitset |= 1 << neighbor
+    #         # If there's a common neighbor, it's not an independent set
+    #         if vertex_bitset & neighbors_bitset:
+    #             return False
+
+    # return True
 
 '''
     Part C: Implement the 3-coloring algorithm from the sender receiver exercise.
