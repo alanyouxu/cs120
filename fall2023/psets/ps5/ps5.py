@@ -68,6 +68,7 @@ class Graph:
         for u in range(self.N):
             for v in self.edges[u]:
 
+
                 # Check if every one has a coloring
                 if self.colors[u] is None or self.colors[v] is None:
                     return False
@@ -120,6 +121,9 @@ def bfs_2_coloring(G, precolored_nodes=None):
     visited = set()
     G.reset_colors()
     preset_color = 2
+    cur_color = 0
+    frontier = set()
+
     if precolored_nodes is not None:
         for node in precolored_nodes:
             G.colors[node] = preset_color
@@ -131,18 +135,13 @@ def bfs_2_coloring(G, precolored_nodes=None):
     # return an empty graph
     if G.N == 0:
         return None
-    else:
-    #initialize our first vertex
-        visited.add(0)
-        cur_color = 0
-        G.colors[0] = cur_color
-        frontier = {0}
 
     while len(visited) < G.N:
         # flip color and 
         cur_color = 1-cur_color
         last_frontier = frontier
         frontier = set()
+        # check frontier
 
         for u in last_frontier:
             for v in G.edges[u]:
@@ -151,15 +150,25 @@ def bfs_2_coloring(G, precolored_nodes=None):
                     visited.add(v)
                     G.colors[v] = cur_color
 
+        # print("Got out of frontier loop")
+
         # must jump to next component, add the first unvisited vertex in list
         if (len(frontier) == 0) and (len(visited) < G.N):
-            i = 1 #start from 1 because we added 0 already
+            i = 0 
             while i in visited:
                 i += 1
+            # add to frontier, visited, and color
             frontier.add(i)
+            visited.add(i)
+            # reset the color (so 0 edge graph only has one color)
+            cur_color = 1 - cur_color
+            G.colors[i] = cur_color
+        
+        # print("frontier = ", frontier, "len visited", len(visited), "visited =", visited)
             
 
-    if G.is_graph_coloring_valid:
+    if G.is_graph_coloring_valid():
+        # print("OK", G.edges)
         return G.colors
     G.reset_colors()
     return None
@@ -209,12 +218,22 @@ def iset_bfs_3_coloring(G):
     # have to check up to max ind set size
     for i in range(max_ind_set + 1):
         for comb in combinations(range(G.N), i):
+            subset = {i for i in comb}
+            if is_independent_set(G, subset):
+                if bfs_2_coloring(G, subset) is not None:
+                    return G.colors
 
     G.reset_colors()
     return None
 
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
-    G0 = Graph(2).add_edge(0, 1)
-    print(bfs_2_coloring(G0))
-    print(iset_bfs_3_coloring(G0))
+    G0 = Graph(10)
+    G0.add_edge(0,1)
+    # G0.add_edge(1,2)
+    G0.add_edge(2,0)
+    
+    # print(G0.colors)
+    print(is_independent_set(G0, {0, 5}))
+
+    # print(iset_bfs_3_coloring(G0))
