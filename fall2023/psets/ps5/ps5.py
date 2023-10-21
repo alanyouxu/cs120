@@ -113,6 +113,7 @@ def exhaustive_search_coloring(G, k=3):
 # Precondition: Assumes that the precolored_nodes form an independent set.
 # If successful, modifies G.colors and returns the coloring.
 # If no coloring is possible, resets all of G's colors to None and returns None.
+
 def bfs_2_coloring(G, precolored_nodes=None):
     # Assign every precolored node to have color 2
     # Initialize visited set to contain precolored nodes if they exist
@@ -127,17 +128,18 @@ def bfs_2_coloring(G, precolored_nodes=None):
         if len(precolored_nodes) == G.N:
             return G.colors
     
-    # TODO: Complete this function by implementing two-coloring using the colors 0 and 1.
-    # If there is no valid coloring, reset all the colors to None using G.reset_colors()
+    # return an empty graph
     if G.N == 0:
         return None
     else:
+    #initialize our first vertex
         visited.add(0)
         cur_color = 0
         G.colors[0] = cur_color
         frontier = {0}
 
     while len(visited) < G.N:
+        # flip color and 
         cur_color = 1-cur_color
         last_frontier = frontier
         frontier = set()
@@ -169,29 +171,12 @@ def bfs_2_coloring(G, precolored_nodes=None):
 # Given an instance of the Graph class G and a subset of precolored nodes,
 # Checks if subset is an independent set in G 
 def is_independent_set(G, subset):
-    # TODO: Complete this function
     for u in subset:
         for v in G.edges[u]:
             if v in subset:
                 return False    
 
     return True
-    # vertex_bitset = 0
-
-    # # Set the corresponding bit for each vertex in the subset
-    # for vertex in subset:
-    #     vertex_bitset |= 1 << vertex
-
-    # # Iterate through the vertices in the subset and check if they have no common neighbors
-    # for vertex in subset:
-    #     neighbors_bitset = 0
-    #     for neighbor in G[vertex]:
-    #         neighbors_bitset |= 1 << neighbor
-    #         # If there's a common neighbor, it's not an independent set
-    #         if vertex_bitset & neighbors_bitset:
-    #             return False
-
-    # return True
 
 '''
     Part C: Implement the 3-coloring algorithm from the sender receiver exercise.
@@ -217,7 +202,13 @@ def is_independent_set(G, subset):
 # If successful, modifies G.colors and returns the coloring.
 # If no coloring is possible, resets all of G's colors to None and returns None.
 def iset_bfs_3_coloring(G):
-    # TODO: Complete this function.
+
+    # get max set
+    max_ind_set = int(G.N/3)
+
+    # have to check up to max ind set size
+    for i in range(max_ind_set + 1):
+        for comb in combinations(range(G.N), i):
 
     G.reset_colors()
     return None
