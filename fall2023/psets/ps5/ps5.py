@@ -152,7 +152,7 @@ def bfs_2_coloring(G, precolored_nodes=None):
 
         # print("Got out of frontier loop")
 
-        # must jump to next component, add the first unvisited vertex in list
+        # if graph disconnected, then jump to first unconnected vertex
         if (len(frontier) == 0) and (len(visited) < G.N):
             i = 0 
             while i in visited:
@@ -229,11 +229,11 @@ def iset_bfs_3_coloring(G):
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
     G0 = Graph(10)
-    G0.add_edge(0,1)
-    # G0.add_edge(1,2)
-    G0.add_edge(2,0)
+    # G0.add_edge(0,1)
+    # # G0.add_edge(1,2)
+    # G0.add_edge(2,0)
     
-    # print(G0.colors)
-    print(is_independent_set(G0, {0, 5}))
+    # # print(G0.colors)
+    # print(is_independent_set(G0, {0, 5}))
 
-    # print(iset_bfs_3_coloring(G0))
+    print(iset_bfs_3_coloring(G0))
