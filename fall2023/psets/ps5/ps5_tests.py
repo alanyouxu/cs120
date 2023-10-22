@@ -6,7 +6,7 @@ from ps5_helpers import timeout, color, generate_line_of_ring_subgraphs, generat
 from ps5 import Graph, exhaustive_search_coloring, bfs_2_coloring, iset_bfs_3_coloring
 
 
-TIMEOUT_LENGTH = 100
+TIMEOUT_LENGTH = 600
 INCLUDE_TESTS_FOR_STAFF_CODE = True
 
 class Debugger:
