@@ -37,41 +37,45 @@ random.seed(120)
 '''
 
 # The timeout length in seconds
-TIMEOUT_LENGTH = 10
+TIMEOUT_LENGTH = 25
 
 def benchmark():
     # You may experiment with these parameters if you wish!
     # Each of these ranges is formatted with a minimum, maximum, and step size.
-    subgraph_line_parameter_range = (100, 300, 100)
-    cluster_graph_p_parameter_range = (0.2, 1.0, 0.2)
-    cluster_graph_cluster_size_parameter_range = (2, 26, 8)
-    cluster_graph_cluster_quantity_parameter_range = (2, 5, 1)
+    subgraph_line_parameter_range = (1, 16, 1)
+    cluster_graph_p_parameter_range = (0.35, 1.0, 0.15)
+    cluster_graph_cluster_size_parameter_range = (2, 500, 1)
+    cluster_graph_cluster_quantity_parameter_range = (2, 3, 1)
 
-    algs = [("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
-            ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g))]
+    # algs = [("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
+    #         ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g))]
+
+    algs = [("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g))]
+    # algs = [("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g))]
 
     print("Line of Rings")
     print()
-    for r in [3,4,5]:
-        print("Size of ring", r)
-        for rings in range(subgraph_line_parameter_range[0], subgraph_line_parameter_range[1], subgraph_line_parameter_range[2]):
-            print("\tNumber of rings", rings)
-            g = generate_line_of_ring_subgraphs(Graph, rings, r)
-            size_text = "\t(n = {}, m = {})".format(g.N, sum([len(v_lst) for v_lst in g.edges]) // 2)
-            print(size_text)
-            for (alg_name, alg) in algs:
-                timedout = False
-                try:
-                    with timeout(seconds=TIMEOUT_LENGTH):
-                        alg(g.clone())
-                except TimeoutError:
-                    timedout = True
-                col = color.GREEN if not timedout else color.ORANGE
-                if timedout:
-                    symbol = color.BOLD + col + u'\u23f1' + color.END + color.END
-                else:
-                    symbol = color.BOLD + col + (u'\u2713' ) + color.END + color.END
-                print("\t\t" + symbol + "  " + alg_name + ": ", ("Timeout" if timedout else "Finished"))
+    # for r in [3,4,5]:
+    # for r in [5]:
+    #     print("Size of ring", r)
+    #     for rings in range(subgraph_line_parameter_range[0], subgraph_line_parameter_range[1], subgraph_line_parameter_range[2]):
+    #         print("\tNumber of rings", rings)
+    #         g = generate_line_of_ring_subgraphs(Graph, rings, r)
+    #         size_text = "\t(n = {}, m = {})".format(g.N, sum([len(v_lst) for v_lst in g.edges]) // 2)
+    #         print(size_text)
+    #         for (alg_name, alg) in algs:
+    #             timedout = False
+    #             try:
+    #                 with timeout(seconds=TIMEOUT_LENGTH):
+    #                     alg(g.clone())
+    #             except TimeoutError:
+    #                 timedout = True
+    #             col = color.GREEN if not timedout else color.ORANGE
+    #             if timedout:
+    #                 symbol = color.BOLD + col + u'\u23f1' + color.END + color.END
+    #             else:
+    #                 symbol = color.BOLD + col + (u'\u2713' ) + color.END + color.END
+    #             print("\t\t" + symbol + "  " + alg_name + ": ", ("Timeout" if timedout else "Finished"))
 
     print()
     print()
