@@ -189,8 +189,21 @@ def iset_bfs_3_coloring(G):
 # If no coloring is possible, resets all of G's colors to None and returns None.
 def sat_3_coloring(G):
     solver = Glucose3()
+    # colors = 3
 
-    # TODO: Add the clauses to the solver
+    # each literal shifted by one because nonzeros only
+
+    # each vertex has a color
+    for i in range(G.N):
+        solver.add_clause([(3 * i + 0 + 1), (3 * i + 1 + 1), (3 * i + 2 + 1)])
+
+    # no colors share an edge
+    for i in range(G.N):
+        for j in G.edges[i]:
+            for c in range(3):
+                solver.add_clause([-(3 * (i) + c + 1), -(3 * (j) + c + 1)])
+
+
 
     # Attempt to solve, return None if no solution possible
     if not solver.solve():
@@ -200,13 +213,25 @@ def sat_3_coloring(G):
     # Accesses the model in form [-v1, v2, -v3 ...], which denotes v1 = False, v2 = True, v3 = False, etc.
     solution = solver.get_model()
 
-    # TODO: If a solution is found, convert it into a coloring and update G.colors
+    # shift literals back and assign color
+    # vertex i color c is coded (k * i + c + 1)
+    for s in solution:
+        if s > 0:
+            t = s - 1
+            vertex = int(t/3)
+            color = t - 3 * int(t/3)
+            G.colors[vertex] = color
+
 
     return G.colors
 
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
-    G0 = Graph(2).add_edge(0, 1)
-    print(bfs_2_coloring(G0))
-    print(iset_bfs_3_coloring(G0))
-    print(sat_3_coloring(G0))
+    G0 = Graph(4).add_edge(0, 3)
+
+    for i in range(G0.N):
+        for j in G0.edges[i]:
+            print(i, "edge", j)
+    # print(bfs_2_coloring(G0))
+    # print(iset_bfs_3_coloring(G0))
+    # print(sat_3_coloring(G0))
