@@ -83,7 +83,7 @@ class Graph:
                 # Make sure colors on each edge are different
                 if self.colors[u] == self.colors[v]:
                     return False
-        
+        # print("Valid coloring found.")
         return True
 
 '''
@@ -222,8 +222,11 @@ def sat_3_coloring(G):
             color = t - 3 * int(t/3)
             G.colors[vertex] = color
 
-
-    return G.colors
+    if G.is_graph_coloring_valid():
+        return G.colors
+    
+    G.reset_colors()
+    return None
 
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
