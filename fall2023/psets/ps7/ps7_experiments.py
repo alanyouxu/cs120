@@ -40,14 +40,16 @@ TIMEOUT_LENGTH = 10
 def benchmark():
     # You may experiment with these parameters if you wish!
     # Each of these ranges is formatted with a minimum, maximum, and step size.
-    subgraph_line_parameter_range = (100, 300, 100)
+    subgraph_line_parameter_range = (1, 300, 1)
     cluster_graph_p_parameter_range = (0.2, 0.95, 0.37)
     cluster_graph_cluster_size_parameter_range = (2, 21, 8)
     cluster_graph_cluster_quantity_parameter_range = (2, 4, 1)
 
-    algs = [("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
-            ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g)), 
-            ("SAT Coloring", lambda g: sat_3_coloring(g))]
+    algs = [
+            # ("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
+            # ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g)), 
+            ("SAT Coloring", lambda g: sat_3_coloring(g))
+            ]
 
     print("Line of Rings")
     print()
