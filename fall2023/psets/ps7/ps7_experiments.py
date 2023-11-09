@@ -3,7 +3,7 @@ import os
 import pickle
 import random
 from time import time
-from ps7_helpers import timeout, color, generate_line_of_ring_subgraphs, generate_random_linked_cluster, generate_hard_coloring_graphs
+from ps7_helpers import timeout, color, generate_k_graph, generate_line_of_ring_subgraphs, generate_random_linked_cluster, generate_hard_coloring_graphs
 from ps7 import Graph, exhaustive_search_coloring, iset_bfs_3_coloring, sat_3_coloring
 random.seed(120)
 
@@ -35,19 +35,43 @@ random.seed(120)
 '''
 
 # The timeout length in seconds
-TIMEOUT_LENGTH = 10
+TIMEOUT_LENGTH = 1
+
+def kbench():
+    algs = [
+            # ("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
+            # ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g)), 
+            ("SAT Coloring", lambda g: sat_3_coloring(g))
+            ]
+    print("complete graphs:")
+    for k in range(850,900,1):
+        g = generate_k_graph(Graph,k)
+        print(k, "graph, m =", k*(k-1)/2)
+        for (alg_name, alg) in algs:
+            timedout = False
+            try:
+                with timeout(seconds=TIMEOUT_LENGTH):
+                    alg(g.clone())
+            except TimeoutError:
+                timedout = True
+            col = color.GREEN if not timedout else color.ORANGE
+            if timedout:
+                symbol = color.BOLD + col + u'\u23f1' + color.END + color.END
+            else:
+                symbol = color.BOLD + col + (u'\u2713' ) + color.END + color.END
+            print("\t\t" + symbol + "  " + alg_name + ": ", ("Timeout" if timedout else "Finished"))
 
 def benchmark():
     # You may experiment with these parameters if you wish!
     # Each of these ranges is formatted with a minimum, maximum, and step size.
-    subgraph_line_parameter_range = (100, 300, 100)
+    subgraph_line_parameter_range = (2000, 30000, 100)
     cluster_graph_p_parameter_range = (0.2, 0.95, 0.37)
     cluster_graph_cluster_size_parameter_range = (2, 21, 8)
     cluster_graph_cluster_quantity_parameter_range = (2, 4, 1)
 
     algs = [
-            ("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
-            ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g)), 
+            # ("Exhaustive Coloring", lambda g: exhaustive_search_coloring(g)),
+            # ("ISET BFS Coloring", lambda g: iset_bfs_3_coloring(g)), 
             ("SAT Coloring", lambda g: sat_3_coloring(g))
             ]
 
@@ -147,5 +171,6 @@ def hard_instance_benchmark():
     
 # random graph testing
 if __name__ == "__main__":
+    # kbench()
     benchmark()
-    hard_instance_benchmark()
+    # hard_instance_benchmark()

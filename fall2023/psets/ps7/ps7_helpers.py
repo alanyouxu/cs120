@@ -40,6 +40,15 @@ def generate_random_graph(Graph, n, p):
                 g.add_edge(i, j)
     return g
 
+def generate_k_graph(Graph, n):
+    # generates complete graph but keeps edge with some probability
+    g = Graph(n)
+    for i in range(n):
+        for j in range(n):
+            if i < j:
+                g.add_edge(i, j)
+    return g
+
 #  Checks all colors
 def validate_graph_coloring(g, coloring):
     if coloring == None:
